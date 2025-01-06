@@ -1617,99 +1617,99 @@ fi
 ###############################################################################
 # BEGIN fix (72 / 277) for 'grub2_enable_apparmor'
 ###############################################################################
-(>&2 echo "Remediating rule 72/277: 'grub2_enable_apparmor'")
-# Remediation is applicable only in certain platforms
-if [ ! -f /.dockerenv ] && [ ! -f /run/.containerenv ]; then
+# (>&2 echo "Remediating rule 72/277: 'grub2_enable_apparmor'")
+# # Remediation is applicable only in certain platforms
+# if [ ! -f /.dockerenv ] && [ ! -f /run/.containerenv ]; then
 
-# Helper to add a grub2 boot parameter.
-add_kernel_boot_param()
-{
-    local param_to_add="$1"
-    local param_to_add_val="$2"
-    local grub_cfg=/etc/default/grub
+# # Helper to add a grub2 boot parameter.
+# add_kernel_boot_param()
+# {
+#     local param_to_add="$1"
+#     local param_to_add_val="$2"
+#     local grub_cfg=/etc/default/grub
 
-    if [ -z "${param_to_add}" ]; then
-        exec_error "No parameter added to ${FUNCNAME}"
-        return
-    fi
+#     if [ -z "${param_to_add}" ]; then
+#         exec_error "No parameter added to ${FUNCNAME}"
+#         return
+#     fi
 
-    local cur_param=$(grep -Po "(?<=^GRUB_CMDLINE_LINUX=\")[^\"]*" ${grub_cfg})
-    if [ $? -eq 0 ]; then
-        # Remove old param, if it exist
-        tmp_vec=($(echo "${cur_param}" | sed -E "s/\b${param_to_add}\b(=\S+)?//"))
+#     local cur_param=$(grep -Po "(?<=^GRUB_CMDLINE_LINUX=\")[^\"]*" ${grub_cfg})
+#     if [ $? -eq 0 ]; then
+#         # Remove old param, if it exist
+#         tmp_vec=($(echo "${cur_param}" | sed -E "s/\b${param_to_add}\b(=\S+)?//"))
 
-        # And add new param
-        if [ -z "${param_to_add_val}" ]; then
-            tmp_vec+=("${param_to_add}")
-        else
-            tmp_vec+=("${param_to_add}=${param_to_add_val}")
-        fi
+#         # And add new param
+#         if [ -z "${param_to_add_val}" ]; then
+#             tmp_vec+=("${param_to_add}")
+#         else
+#             tmp_vec+=("${param_to_add}=${param_to_add_val}")
+#         fi
 
-        cur_param="${tmp_vec[@]}"
-        # Remove old GRUB_CMDLINE_LINUX entry
-        sed -i /^GRUB_CMDLINE_LINUX=/d ${grub_cfg}
-    fi
+#         cur_param="${tmp_vec[@]}"
+#         # Remove old GRUB_CMDLINE_LINUX entry
+#         sed -i /^GRUB_CMDLINE_LINUX=/d ${grub_cfg}
+#     fi
 
-    echo "GRUB_CMDLINE_LINUX=\"${cur_param}\"" >> ${grub_cfg}
-}
-add_kernel_boot_param apparmor 1
-add_kernel_boot_param security apparmor
-# Execute update grub and fix permissions changed
-do_update_grub()
-{
-    local cfg="/boot/grub/grub.cfg"
-    update-grub
-    chown root:root $cfg
-    chmod og-rwx $cfg
-}
-do_update_grub
+#     echo "GRUB_CMDLINE_LINUX=\"${cur_param}\"" >> ${grub_cfg}
+# }
+# add_kernel_boot_param apparmor 1
+# add_kernel_boot_param security apparmor
+# # Execute update grub and fix permissions changed
+# do_update_grub()
+# {
+#     local cfg="/boot/grub/grub.cfg"
+#     update-grub
+#     chown root:root $cfg
+#     chmod og-rwx $cfg
+# }
+# do_update_grub
 
-else
-    >&2 echo 'Remediation is not applicable, nothing was done'
-fi
-# END fix for 'grub2_enable_apparmor'
+# else
+#     >&2 echo 'Remediation is not applicable, nothing was done'
+# fi
+# # END fix for 'grub2_enable_apparmor'
 
-###############################################################################
-# BEGIN fix (73 / 277) for 'file_owner_grub2_cfg'
-###############################################################################
-(>&2 echo "Remediating rule 73/277: 'file_owner_grub2_cfg'")
-# Remediation is applicable only in certain platforms
-if [ ! -f /.dockerenv ] && [ ! -f /run/.containerenv ]; then
+# ###############################################################################
+# # BEGIN fix (73 / 277) for 'file_owner_grub2_cfg'
+# ###############################################################################
+# (>&2 echo "Remediating rule 73/277: 'file_owner_grub2_cfg'")
+# # Remediation is applicable only in certain platforms
+# if [ ! -f /.dockerenv ] && [ ! -f /run/.containerenv ]; then
 
-chown 0 /boot/grub/grub.cfg
+# chown 0 /boot/grub/grub.cfg
 
-else
-    >&2 echo 'Remediation is not applicable, nothing was done'
-fi
-# END fix for 'file_owner_grub2_cfg'
+# else
+#     >&2 echo 'Remediation is not applicable, nothing was done'
+# fi
+# # END fix for 'file_owner_grub2_cfg'
 
-###############################################################################
-# BEGIN fix (74 / 277) for 'file_permissions_grub2_cfg'
-###############################################################################
-(>&2 echo "Remediating rule 74/277: 'file_permissions_grub2_cfg'")
-# Remediation is applicable only in certain platforms
-if [ ! -f /.dockerenv ] && [ ! -f /run/.containerenv ]; then
+# ###############################################################################
+# # BEGIN fix (74 / 277) for 'file_permissions_grub2_cfg'
+# ###############################################################################
+# (>&2 echo "Remediating rule 74/277: 'file_permissions_grub2_cfg'")
+# # Remediation is applicable only in certain platforms
+# if [ ! -f /.dockerenv ] && [ ! -f /run/.containerenv ]; then
 
-chmod u-xs,g-xwrs,o-xwrt /boot/grub/grub.cfg
+# chmod u-xs,g-xwrs,o-xwrt /boot/grub/grub.cfg
 
-else
-    >&2 echo 'Remediation is not applicable, nothing was done'
-fi
-# END fix for 'file_permissions_grub2_cfg'
+# else
+#     >&2 echo 'Remediation is not applicable, nothing was done'
+# fi
+# # END fix for 'file_permissions_grub2_cfg'
 
-###############################################################################
-# BEGIN fix (75 / 277) for 'grub2_password'
-###############################################################################
-(>&2 echo "Remediating rule 75/277: 'grub2_password'")
-# FIX FOR THIS RULE IS MISSING
-# END fix for 'grub2_password'
+# ###############################################################################
+# # BEGIN fix (75 / 277) for 'grub2_password'
+# ###############################################################################
+# (>&2 echo "Remediating rule 75/277: 'grub2_password'")
+# # FIX FOR THIS RULE IS MISSING
+# # END fix for 'grub2_password'
 
-###############################################################################
-# BEGIN fix (76 / 277) for 'grub2_uefi_password'
-###############################################################################
-(>&2 echo "Remediating rule 76/277: 'grub2_uefi_password'")
-# FIX FOR THIS RULE IS MISSING
-# END fix for 'grub2_uefi_password'
+# ###############################################################################
+# # BEGIN fix (76 / 277) for 'grub2_uefi_password'
+# ###############################################################################
+# (>&2 echo "Remediating rule 76/277: 'grub2_uefi_password'")
+# # FIX FOR THIS RULE IS MISSING
+# # END fix for 'grub2_uefi_password'
 
 ###############################################################################
 # BEGIN fix (77 / 277) for 'package_rsyslog_installed'
