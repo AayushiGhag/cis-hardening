@@ -607,14 +607,12 @@ fi
 if dpkg-query --show --showformat='${db:Status-Status}\n' 'libpam-runtime' 2>/dev/null | grep -q installed; then
 
 
-var_password_pam_minclass='4'
+var_password_pam_minclass='4';
 
 
 # Test if the config_file is a symbolic link. If so, use --follow-symlinks with sed.
 # Otherwise, regular sed command will do.
 sed_command=('sed' '-i')
-
-fi
 if test -L "/etc/security/pwquality.conf"; then
     sed_command+=('--follow-symlinks')
 fi
