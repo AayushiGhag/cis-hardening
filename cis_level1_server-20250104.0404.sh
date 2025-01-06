@@ -1467,72 +1467,72 @@ fi
 ###############################################################################
 # BEGIN fix (67 / 277) for 'accounts_umask_etc_login_defs'
 ###############################################################################
-(>&2 echo "Remediating rule 67/277: 'accounts_umask_etc_login_defs'")
-# Remediation is applicable only in certain platforms
-if dpkg-query --show --showformat='${db:Status-Status}\n' 'login' 2>/dev/null | grep -q installed; then
+# (>&2 echo "Remediating rule 67/277: 'accounts_umask_etc_login_defs'")
+# # Remediation is applicable only in certain platforms
+# if dpkg-query --show --showformat='${db:Status-Status}\n' 'login' 2>/dev/null | grep -q installed; then
 
 
-var_accounts_user_umask='027'
-
-
-
-# Test if the config_file is a symbolic link. If so, use --follow-symlinks with sed.
-# Otherwise, regular sed command will do.
-sed_command=('sed' '-i')
-if test -L "/etc/login.defs"; then
-    sed_command+=('--follow-symlinks')
-fi
-
-# If the cce arg is empty, CCE is not assigned.
-if [ -z "" ]; then
-    cce="CCE"
-else
-    cce=""
-fi
-
-# Strip any search characters in the key arg so that the key can be replaced without
-# adding any search characters to the config file.
-stripped_key=$(sed 's/[\^=\$,;+]*//g' <<< "^UMASK")
-
-# shellcheck disable=SC2059
-printf -v formatted_output "%s %s" "$stripped_key" "$var_accounts_user_umask"
-
-# If the key exists, change it. Otherwise, add it to the config_file.
-# We search for the key string followed by a word boundary (matched by \>),
-# so if we search for 'setting', 'setting2' won't match.
-if LC_ALL=C grep -q -m 1 -i -e "^UMASK\\>" "/etc/login.defs"; then
-    "${sed_command[@]}" "s/^UMASK\\>.*/$formatted_output/gi" "/etc/login.defs"
-else
-    # \n is precaution for case where file ends without trailing newline
-    printf '\n# Per %s: Set %s in %s\n' "$cce" "$formatted_output" "/etc/login.defs" >> "/etc/login.defs"
-    printf '%s\n' "$formatted_output" >> "/etc/login.defs"
-fi
-
-else
-    >&2 echo 'Remediation is not applicable, nothing was done'
-fi
-# END fix for 'accounts_umask_etc_login_defs'
-
-###############################################################################
-# BEGIN fix (68 / 277) for 'accounts_umask_etc_profile'
-###############################################################################
-(>&2 echo "Remediating rule 68/277: 'accounts_umask_etc_profile'")
-
-
-var_accounts_user_umask='027'
+# var_accounts_user_umask='027'
 
 
 
-readarray -t profile_files < <(find /etc/profile.d/ -type f -name '*.sh' -or -name 'sh.local')
+# # Test if the config_file is a symbolic link. If so, use --follow-symlinks with sed.
+# # Otherwise, regular sed command will do.
+# sed_command=('sed' '-i')
+# if test -L "/etc/login.defs"; then
+#     sed_command+=('--follow-symlinks')
+# fi
 
-for file in "${profile_files[@]}" /etc/profile; do
-  grep -qE '^[^#]*umask' "$file" && sed -i -E "s/^(\s*umask\s*)[0-7]+/\1$var_accounts_user_umask/g" "$file"
-done
+# # If the cce arg is empty, CCE is not assigned.
+# if [ -z "" ]; then
+#     cce="CCE"
+# else
+#     cce=""
+# fi
 
-if ! grep -qrE '^[^#]*umask' /etc/profile*; then
-  echo "umask $var_accounts_user_umask" >> /etc/profile
-fi
-# END fix for 'accounts_umask_etc_profile'
+# # Strip any search characters in the key arg so that the key can be replaced without
+# # adding any search characters to the config file.
+# stripped_key=$(sed 's/[\^=\$,;+]*//g' <<< "^UMASK")
+
+# # shellcheck disable=SC2059
+# printf -v formatted_output "%s %s" "$stripped_key" "$var_accounts_user_umask"
+
+# # If the key exists, change it. Otherwise, add it to the config_file.
+# # We search for the key string followed by a word boundary (matched by \>),
+# # so if we search for 'setting', 'setting2' won't match.
+# if LC_ALL=C grep -q -m 1 -i -e "^UMASK\\>" "/etc/login.defs"; then
+#     "${sed_command[@]}" "s/^UMASK\\>.*/$formatted_output/gi" "/etc/login.defs"
+# else
+#     # \n is precaution for case where file ends without trailing newline
+#     printf '\n# Per %s: Set %s in %s\n' "$cce" "$formatted_output" "/etc/login.defs" >> "/etc/login.defs"
+#     printf '%s\n' "$formatted_output" >> "/etc/login.defs"
+# fi
+
+# else
+#     >&2 echo 'Remediation is not applicable, nothing was done'
+# fi
+# # END fix for 'accounts_umask_etc_login_defs'
+
+# ###############################################################################
+# # BEGIN fix (68 / 277) for 'accounts_umask_etc_profile'
+# ###############################################################################
+# (>&2 echo "Remediating rule 68/277: 'accounts_umask_etc_profile'")
+
+
+# var_accounts_user_umask='027'
+
+
+
+# readarray -t profile_files < <(find /etc/profile.d/ -type f -name '*.sh' -or -name 'sh.local')
+
+# for file in "${profile_files[@]}" /etc/profile; do
+#   grep -qE '^[^#]*umask' "$file" && sed -i -E "s/^(\s*umask\s*)[0-7]+/\1$var_accounts_user_umask/g" "$file"
+# done
+
+# if ! grep -qrE '^[^#]*umask' /etc/profile*; then
+#   echo "umask $var_accounts_user_umask" >> /etc/profile
+# fi
+# # END fix for 'accounts_umask_etc_profile'
 
 ###############################################################################
 # BEGIN fix (69 / 277) for 'accounts_umask_interactive_users'
