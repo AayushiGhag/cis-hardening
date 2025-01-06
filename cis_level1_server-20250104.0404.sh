@@ -599,368 +599,368 @@ fi
 # fi
 # END fix for 'accounts_password_pam_lcredit'
 
-###############################################################################
-# BEGIN fix (27 / 277) for 'accounts_password_pam_minclass'
-###############################################################################
-(>&2 echo "Remediating rule 27/277: 'accounts_password_pam_minclass'")
-# Remediation is applicable only in certain platforms
-if dpkg-query --show --showformat='${db:Status-Status}\n' 'libpam-runtime' 2>/dev/null | grep -q installed; then
-
-
-var_password_pam_minclass='4';
-
-
-# Test if the config_file is a symbolic link. If so, use --follow-symlinks with sed.
-# Otherwise, regular sed command will do.
-sed_command=('sed' '-i')
-if test -L "/etc/security/pwquality.conf"; then
-    sed_command+=('--follow-symlinks')
-fi
-
-# If the cce arg is empty, CCE is not assigned.
-if [ -z "" ]; then
-    cce="CCE"
-else
-    cce=""
-fi
-
-# Strip any search characters in the key arg so that the key can be replaced without
-# adding any search characters to the config file.
-stripped_key=$(sed 's/[\^=\$,;+]*//g' <<< "^minclass")
-
-# shellcheck disable=SC2059
-printf -v formatted_output "%s = %s" "$stripped_key" "$var_password_pam_minclass"
-
-# If the key exists, change it. Otherwise, add it to the config_file.
-# We search for the key string followed by a word boundary (matched by \>),
-# so if we search for 'setting', 'setting2' won't match.
-if LC_ALL=C grep -q -m 1 -i -e "^minclass\\>" "/etc/security/pwquality.conf"; then
-    "${sed_command[@]}" "s/^minclass\\>.*/$formatted_output/gi" "/etc/security/pwquality.conf"
-else
-    # \n is precaution for case where file ends without trailing newline
-    printf '\n# Per %s: Set %s in %s\n' "$cce" "$formatted_output" "/etc/security/pwquality.conf" >> "/etc/security/pwquality.conf"
-    printf '%s\n' "$formatted_output" >> "/etc/security/pwquality.conf"
-fi
-
-else
-    >&2 echo 'Remediation is not applicable, nothing was done'
-fi
-# END fix for 'accounts_password_pam_minclass'
-
-###############################################################################
-# BEGIN fix (28 / 277) for 'accounts_password_pam_minlen'
-###############################################################################
-(>&2 echo "Remediating rule 28/277: 'accounts_password_pam_minlen'")
-# Remediation is applicable only in certain platforms
-if dpkg-query --show --showformat='${db:Status-Status}\n' 'libpam-runtime' 2>/dev/null | grep -q installed; then
-
-
-var_password_pam_minlen='14'
-
-
-
-# Test if the config_file is a symbolic link. If so, use --follow-symlinks with sed.
-# Otherwise, regular sed command will do.
-sed_command=('sed' '-i')
-fi
-
-if test -L "/etc/security/pwquality.conf"; then
-    sed_command+=('--follow-symlinks')
-fi
-
-# If the cce arg is empty, CCE is not assigned.
-if [ -z "" ]; then
-    cce="CCE"
-else
-    cce=""
-fi
-
-# Strip any search characters in the key arg so that the key can be replaced without
-# adding any search characters to the config file.
-stripped_key=$(sed 's/[\^=\$,;+]*//g' <<< "^minlen")
-
-# shellcheck disable=SC2059
-printf -v formatted_output "%s = %s" "$stripped_key" "$var_password_pam_minlen"
-
-# If the key exists, change it. Otherwise, add it to the config_file.
-# We search for the key string followed by a word boundary (matched by \>),
-# so if we search for 'setting', 'setting2' won't match.
-if LC_ALL=C grep -q -m 1 -i -e "^minlen\\>" "/etc/security/pwquality.conf"; then
-    "${sed_command[@]}" "s/^minlen\\>.*/$formatted_output/gi" "/etc/security/pwquality.conf"
-else
-    # \n is precaution for case where file ends without trailing newline
-    printf '\n# Per %s: Set %s in %s\n' "$cce" "$formatted_output" "/etc/security/pwquality.conf" >> "/etc/security/pwquality.conf"
-    printf '%s\n' "$formatted_output" >> "/etc/security/pwquality.conf"
-fi
-
-else
-    >&2 echo 'Remediation is not applicable, nothing was done'
-fi
-# END fix for 'accounts_password_pam_minlen'
-
-###############################################################################
-# BEGIN fix (29 / 277) for 'accounts_password_pam_ocredit'
-###############################################################################
-(>&2 echo "Remediating rule 29/277: 'accounts_password_pam_ocredit'")
-# Remediation is applicable only in certain platforms
-if dpkg-query --show --showformat='${db:Status-Status}\n' 'libpam-runtime' 2>/dev/null | grep -q installed; then
-
-
-var_password_pam_ocredit='-1'
-
-
-
-# Test if the config_file is a symbolic link. If so, use --follow-symlinks with sed.
-# Otherwise, regular sed command will do.
-sed_command=('sed' '-i')
-fi
-if test -L "/etc/security/pwquality.conf"; then
-    sed_command+=('--follow-symlinks')
-fi
-
-# If the cce arg is empty, CCE is not assigned.
-if [ -z "" ]; then
-    cce="CCE"
-else
-    cce=""
-fi
-
-# Strip any search characters in the key arg so that the key can be replaced without
-# adding any search characters to the config file.
-stripped_key=$(sed 's/[\^=\$,;+]*//g' <<< "^ocredit")
-
-# shellcheck disable=SC2059
-printf -v formatted_output "%s = %s" "$stripped_key" "$var_password_pam_ocredit"
-
-# If the key exists, change it. Otherwise, add it to the config_file.
-# We search for the key string followed by a word boundary (matched by \>),
-# so if we search for 'setting', 'setting2' won't match.
-if LC_ALL=C grep -q -m 1 -i -e "^ocredit\\>" "/etc/security/pwquality.conf"; then
-    "${sed_command[@]}" "s/^ocredit\\>.*/$formatted_output/gi" "/etc/security/pwquality.conf"
-else
-    # \n is precaution for case where file ends without trailing newline
-    printf '\n# Per %s: Set %s in %s\n' "$cce" "$formatted_output" "/etc/security/pwquality.conf" >> "/etc/security/pwquality.conf"
-    printf '%s\n' "$formatted_output" >> "/etc/security/pwquality.conf"
-fi
-
-else
-    >&2 echo 'Remediation is not applicable, nothing was done'
-fi
-# END fix for 'accounts_password_pam_ocredit'
-
-###############################################################################
-# BEGIN fix (30 / 277) for 'accounts_password_pam_retry'
-###############################################################################
-(>&2 echo "Remediating rule 30/277: 'accounts_password_pam_retry'")
-# Remediation is applicable only in certain platforms
-if dpkg-query --show --showformat='${db:Status-Status}\n' 'libpam-runtime' 2>/dev/null | grep -q installed; then
-
-
-var_password_pam_retry='3'
-function ensure_pam_module_options {
-	if [ $# -lt 8 ] || [ $# -gt 9 ] ; then
-                echo "$0 requires eight or nine arguments" >&2
-                exit 1
-        fi
-	local _pamFile="$1" _type="$2" _control="$3" _module="$4" _option="$5" _valueRegex="$6" _defaultValue="$7" _position="$8"
-	local _remove_argument=""
-	if [ $# -eq 9 ] ; then
-		_remove_argument="$9"
-		# convert it to lowercase
-		_remove_argument=${_remove_argument,,}
-	fi
-
-	# make sure that we have a line like this in ${_pamFile} (additional options are left as-is):
-	# ${_type} ${_control} ${_module} ${_option}=${_valueRegex}
-
-	if ! [ -e "$_pamFile" ] ; then
-		echo "$_pamFile doesn't exist" >&2
-		exit 1
-	fi
-
-	# if remove argument only
-	if [ "${_remove_argument}" = "yes" -o "${_remove_argument}" = "true" ] ; then
-		sed --follow-symlinks -i -E -e "s/^(\\s*${_type}\\s+\\S+\\s+${_module}(\\s.+)?)\\s${_option}(=\\S+)?/\\1/" "${_pamFile}"
-		exit 0
-	fi
-
-	# non-empty values need to be preceded by an equals sign
-	[ -n "${_valueRegex}" ] && _valueRegex="=${_valueRegex}"
-	# add an equals sign to non-empty values
-	[ -n "${_defaultValue}" ] && _defaultValue="=${_defaultValue}"
-
-	# fix 'type' if it's wrong
-	if grep -q -P "^\\s*(?"'!'"${_type}\\s)[[:alnum:]]+\\s+[[:alnum:]]+\\s+${_module}" < "${_pamFile}" ; then
-		sed --follow-symlinks -i -E -e "s/^(\\s*)[[:alnum:]]+(\\s+[[:alnum:]]+\\s+${_module})/\\1${_type}\\2/" "${_pamFile}"
-	fi
-
-	# fix 'control' if it's wrong
-	if grep -q -P "^\\s*${_type}\\s+(?"'!'"${_control})[[:alnum:]]+\\s+${_module}" < "${_pamFile}" ; then
-		sed --follow-symlinks -i -E -e "s/^(\\s*${_type}\\s+)[[:alnum:]]+(\\s+${_module})/\\1${_control}\\2/" "${_pamFile}"
-	fi
-
-	# fix the value for 'option' if one exists but does not match '_valueRegex'
-    if grep -q -P "^\\s*${_type}\\s+${_control}\\s+${_module}(\\s.+)?\\s+${_option}(?"'!'"${_valueRegex}(\\s|\$))" < "${_pamFile}" ; then
-		sed --follow-symlinks -i -E -e "s/^(\\s*${_type}\\s+${_control}\\s+${_module}(\\s.+)?\\s)${_option}=[^[:space:]]*/\\1${_option}${_defaultValue}/" "${_pamFile}"
-
-    # add 'option=default' if option is not set
-	elif grep -q -E "^\\s*${_type}\\s+${_control}\\s+${_module}" < "${_pamFile}" &&
-         grep    -E "^\\s*${_type}\\s+${_control}\\s+${_module}" < "${_pamFile}" | grep -q -E -v "\\s${_option}(=|\\s|\$)" ; then
-
-		sed --follow-symlinks -i -E -e "s/^(\\s*${_type}\\s+${_control}\\s+${_module}[^\\n]*)/\\1 ${_option}${_defaultValue}/" "${_pamFile}"
-	# add a new entry if none exists
-	elif ! grep -q -P "^\\s*${_type}\\s+${_control}\\s+${_module}(\\s.+)?\\s+${_option}${_valueRegex}(\\s|\$)" < "${_pamFile}" ; then
-		if [ "${_position}" = "top" ] ; then
-			sed --follow-symlinks -i "/\"Primary\"/i ${_type} ${_control} ${_module} ${_option}${_defaultValue}" "${_pamFile}"
-		else
-			echo "${_type} ${_control} ${_module} ${_option}${_defaultValue}" >> "${_pamFile}"
-        fi
-	fi
-}
-ensure_pam_module_options '/etc/pam.d/common-password' 'password' 'requisite' 'pam_pwquality.so' 'retry' $var_password_pam_retry $var_password_pam_retry 'bottom'
-
-else
-    >&2 echo 'Remediation is not applicable, nothing was done'
-fi
-# END fix for 'accounts_password_pam_retry'
-
-###############################################################################
-# BEGIN fix (31 / 277) for 'accounts_password_pam_ucredit'
-###############################################################################
-(>&2 echo "Remediating rule 31/277: 'accounts_password_pam_ucredit'")
-# Remediation is applicable only in certain platforms
-if dpkg-query --show --showformat='${db:Status-Status}\n' 'libpam-runtime' 2>/dev/null | grep -q installed; then
-
-
-var_password_pam_ucredit='-1'
-
-
-
-# Test if the config_file is a symbolic link. If so, use --follow-symlinks with sed.
-# Otherwise, regular sed command will do.
-sed_command=('sed' '-i')
-if test -L "/etc/security/pwquality.conf"; then
-    sed_command+=('--follow-symlinks')
-fi
-
-# If the cce arg is empty, CCE is not assigned.
-if [ -z "" ]; then
-    cce="CCE"
-else
-    cce=""
-fi
-
-# Strip any search characters in the key arg so that the key can be replaced without
-# adding any search characters to the config file.
-stripped_key=$(sed 's/[\^=\$,;+]*//g' <<< "^ucredit")
-
-# shellcheck disable=SC2059
-printf -v formatted_output "%s = %s" "$stripped_key" "$var_password_pam_ucredit"
-
-# If the key exists, change it. Otherwise, add it to the config_file.
-# We search for the key string followed by a word boundary (matched by \>),
-# so if we search for 'setting', 'setting2' won't match.
-if LC_ALL=C grep -q -m 1 -i -e "^ucredit\\>" "/etc/security/pwquality.conf"; then
-    "${sed_command[@]}" "s/^ucredit\\>.*/$formatted_output/gi" "/etc/security/pwquality.conf"
-else
-    # \n is precaution for case where file ends without trailing newline
-    printf '\n# Per %s: Set %s in %s\n' "$cce" "$formatted_output" "/etc/security/pwquality.conf" >> "/etc/security/pwquality.conf"
-    printf '%s\n' "$formatted_output" >> "/etc/security/pwquality.conf"
-fi
-
-else
-    >&2 echo 'Remediation is not applicable, nothing was done'
-fi
-# END fix for 'accounts_password_pam_ucredit'
-
-###############################################################################
-# BEGIN fix (32 / 277) for 'single_user_authentication'
-###############################################################################
-(>&2 echo "Remediating rule 32/277: 'single_user_authentication'")
-
-var_root_passwd_hash='*'
-
-
-
-# Only applies the hash to /etc/shadow if the variable contains a value different from '*', '!'
-# or empty
-if [ -n "${var_root_passwd_hash/+([[:blank:]])/}" ] && [ "${var_root_passwd_hash}" != "*" ] &&\
-    [ "${var_root_passwd_hash}" != "!" ]; then
-    sed -Ei "s@^root:[^:]*@root:${var_root_passwd_hash}@" /etc/shadow
-fi
-# END fix for 'single_user_authentication'
-
-###############################################################################
-# BEGIN fix (33 / 277) for 'account_disable_post_pw_expiration'
-###############################################################################
-(>&2 echo "Remediating rule 33/277: 'account_disable_post_pw_expiration'")
-# Remediation is applicable only in certain platforms
-if dpkg-query --show --showformat='${db:Status-Status}\n' 'login' 2>/dev/null | grep -q installed; then
-
-
-var_account_disable_post_pw_expiration='30'
-
-
-
-# Test if the config_file is a symbolic link. If so, use --follow-symlinks with sed.
-# Otherwise, regular sed command will do.
-sed_command=('sed' '-i')
-if test -L "/etc/default/useradd"; then
-    sed_command+=('--follow-symlinks')
-fi
-
-# If the cce arg is empty, CCE is not assigned.
-if [ -z "" ]; then
-    cce="CCE"
-else
-    cce=""
-fi
-
-# Strip any search characters in the key arg so that the key can be replaced without
-# adding any search characters to the config file.
-stripped_key=$(sed 's/[\^=\$,;+]*//g' <<< "^INACTIVE")
-
-# shellcheck disable=SC2059
-printf -v formatted_output "%s=%s" "$stripped_key" "$var_account_disable_post_pw_expiration"
-
-# If the key exists, change it. Otherwise, add it to the config_file.
-# We search for the key string followed by a word boundary (matched by \>),
-# so if we search for 'setting', 'setting2' won't match.
-if LC_ALL=C grep -q -m 1 -i -e "^INACTIVE\\>" "/etc/default/useradd"; then
-    "${sed_command[@]}" "s/^INACTIVE\\>.*/$formatted_output/gi" "/etc/default/useradd"
-else
-    # \n is precaution for case where file ends without trailing newline
-    printf '\n# Per %s: Set %s in %s\n' "$cce" "$formatted_output" "/etc/default/useradd" >> "/etc/default/useradd"
-    printf '%s\n' "$formatted_output" >> "/etc/default/useradd"
-fi
-
-else
-    >&2 echo 'Remediation is not applicable, nothing was done'
-fi
-# END fix for 'account_disable_post_pw_expiration'
-
-###############################################################################
-# BEGIN fix (34 / 277) for 'accounts_maximum_age_login_defs'
-###############################################################################
-(>&2 echo "Remediating rule 34/277: 'accounts_maximum_age_login_defs'")
-# Remediation is applicable only in certain platforms
-if dpkg-query --show --showformat='${db:Status-Status}\n' 'login' 2>/dev/null | grep -q installed; then
-
-
-var_accounts_maximum_age_login_defs='365'
-
-
-
-grep -q ^PASS_MAX_DAYS /etc/login.defs && \
-  sed -i "s/PASS_MAX_DAYS.*/PASS_MAX_DAYS     $var_accounts_maximum_age_login_defs/g" /etc/login.defs
-if ! [ $? -eq 0 ]; then
-    echo "PASS_MAX_DAYS      $var_accounts_maximum_age_login_defs" >> /etc/login.defs
-fi
-
-else
-    >&2 echo 'Remediation is not applicable, nothing was done'
-fi
-# END fix for 'accounts_maximum_age_login_defs'
+# ###############################################################################
+# # BEGIN fix (27 / 277) for 'accounts_password_pam_minclass'
+# ###############################################################################
+# (>&2 echo "Remediating rule 27/277: 'accounts_password_pam_minclass'")
+# # Remediation is applicable only in certain platforms
+# if dpkg-query --show --showformat='${db:Status-Status}\n' 'libpam-runtime' 2>/dev/null | grep -q installed; then
+
+
+# var_password_pam_minclass='4';
+
+
+# # Test if the config_file is a symbolic link. If so, use --follow-symlinks with sed.
+# # Otherwise, regular sed command will do.
+# sed_command=('sed' '-i')
+# if test -L "/etc/security/pwquality.conf"; then
+#     sed_command+=('--follow-symlinks')
+# fi
+
+# # If the cce arg is empty, CCE is not assigned.
+# if [ -z "" ]; then
+#     cce="CCE"
+# else
+#     cce=""
+# fi
+
+# # Strip any search characters in the key arg so that the key can be replaced without
+# # adding any search characters to the config file.
+# stripped_key=$(sed 's/[\^=\$,;+]*//g' <<< "^minclass")
+
+# # shellcheck disable=SC2059
+# printf -v formatted_output "%s = %s" "$stripped_key" "$var_password_pam_minclass"
+
+# # If the key exists, change it. Otherwise, add it to the config_file.
+# # We search for the key string followed by a word boundary (matched by \>),
+# # so if we search for 'setting', 'setting2' won't match.
+# if LC_ALL=C grep -q -m 1 -i -e "^minclass\\>" "/etc/security/pwquality.conf"; then
+#     "${sed_command[@]}" "s/^minclass\\>.*/$formatted_output/gi" "/etc/security/pwquality.conf"
+# else
+#     # \n is precaution for case where file ends without trailing newline
+#     printf '\n# Per %s: Set %s in %s\n' "$cce" "$formatted_output" "/etc/security/pwquality.conf" >> "/etc/security/pwquality.conf"
+#     printf '%s\n' "$formatted_output" >> "/etc/security/pwquality.conf"
+# fi
+
+# else
+#     >&2 echo 'Remediation is not applicable, nothing was done'
+# fi
+# # END fix for 'accounts_password_pam_minclass'
+
+# ###############################################################################
+# # BEGIN fix (28 / 277) for 'accounts_password_pam_minlen'
+# ###############################################################################
+# (>&2 echo "Remediating rule 28/277: 'accounts_password_pam_minlen'")
+# # Remediation is applicable only in certain platforms
+# if dpkg-query --show --showformat='${db:Status-Status}\n' 'libpam-runtime' 2>/dev/null | grep -q installed; then
+
+
+# var_password_pam_minlen='14'
+
+
+
+# # Test if the config_file is a symbolic link. If so, use --follow-symlinks with sed.
+# # Otherwise, regular sed command will do.
+# sed_command=('sed' '-i')
+# fi
+
+# if test -L "/etc/security/pwquality.conf"; then
+#     sed_command+=('--follow-symlinks')
+# fi
+
+# # If the cce arg is empty, CCE is not assigned.
+# if [ -z "" ]; then
+#     cce="CCE"
+# else
+#     cce=""
+# fi
+
+# # Strip any search characters in the key arg so that the key can be replaced without
+# # adding any search characters to the config file.
+# stripped_key=$(sed 's/[\^=\$,;+]*//g' <<< "^minlen")
+
+# # shellcheck disable=SC2059
+# printf -v formatted_output "%s = %s" "$stripped_key" "$var_password_pam_minlen"
+
+# # If the key exists, change it. Otherwise, add it to the config_file.
+# # We search for the key string followed by a word boundary (matched by \>),
+# # so if we search for 'setting', 'setting2' won't match.
+# if LC_ALL=C grep -q -m 1 -i -e "^minlen\\>" "/etc/security/pwquality.conf"; then
+#     "${sed_command[@]}" "s/^minlen\\>.*/$formatted_output/gi" "/etc/security/pwquality.conf"
+# else
+#     # \n is precaution for case where file ends without trailing newline
+#     printf '\n# Per %s: Set %s in %s\n' "$cce" "$formatted_output" "/etc/security/pwquality.conf" >> "/etc/security/pwquality.conf"
+#     printf '%s\n' "$formatted_output" >> "/etc/security/pwquality.conf"
+# fi
+
+# else
+#     >&2 echo 'Remediation is not applicable, nothing was done'
+# fi
+# # END fix for 'accounts_password_pam_minlen'
+
+# ###############################################################################
+# # BEGIN fix (29 / 277) for 'accounts_password_pam_ocredit'
+# ###############################################################################
+# (>&2 echo "Remediating rule 29/277: 'accounts_password_pam_ocredit'")
+# # Remediation is applicable only in certain platforms
+# if dpkg-query --show --showformat='${db:Status-Status}\n' 'libpam-runtime' 2>/dev/null | grep -q installed; then
+
+
+# var_password_pam_ocredit='-1'
+
+
+
+# # Test if the config_file is a symbolic link. If so, use --follow-symlinks with sed.
+# # Otherwise, regular sed command will do.
+# sed_command=('sed' '-i')
+# fi
+# if test -L "/etc/security/pwquality.conf"; then
+#     sed_command+=('--follow-symlinks')
+# fi
+
+# # If the cce arg is empty, CCE is not assigned.
+# if [ -z "" ]; then
+#     cce="CCE"
+# else
+#     cce=""
+# fi
+
+# # Strip any search characters in the key arg so that the key can be replaced without
+# # adding any search characters to the config file.
+# stripped_key=$(sed 's/[\^=\$,;+]*//g' <<< "^ocredit")
+
+# # shellcheck disable=SC2059
+# printf -v formatted_output "%s = %s" "$stripped_key" "$var_password_pam_ocredit"
+
+# # If the key exists, change it. Otherwise, add it to the config_file.
+# # We search for the key string followed by a word boundary (matched by \>),
+# # so if we search for 'setting', 'setting2' won't match.
+# if LC_ALL=C grep -q -m 1 -i -e "^ocredit\\>" "/etc/security/pwquality.conf"; then
+#     "${sed_command[@]}" "s/^ocredit\\>.*/$formatted_output/gi" "/etc/security/pwquality.conf"
+# else
+#     # \n is precaution for case where file ends without trailing newline
+#     printf '\n# Per %s: Set %s in %s\n' "$cce" "$formatted_output" "/etc/security/pwquality.conf" >> "/etc/security/pwquality.conf"
+#     printf '%s\n' "$formatted_output" >> "/etc/security/pwquality.conf"
+# fi
+
+# else
+#     >&2 echo 'Remediation is not applicable, nothing was done'
+# fi
+# # END fix for 'accounts_password_pam_ocredit'
+
+# ###############################################################################
+# # BEGIN fix (30 / 277) for 'accounts_password_pam_retry'
+# ###############################################################################
+# (>&2 echo "Remediating rule 30/277: 'accounts_password_pam_retry'")
+# # Remediation is applicable only in certain platforms
+# if dpkg-query --show --showformat='${db:Status-Status}\n' 'libpam-runtime' 2>/dev/null | grep -q installed; then
+
+
+# var_password_pam_retry='3'
+# function ensure_pam_module_options {
+# 	if [ $# -lt 8 ] || [ $# -gt 9 ] ; then
+#                 echo "$0 requires eight or nine arguments" >&2
+#                 exit 1
+#         fi
+# 	local _pamFile="$1" _type="$2" _control="$3" _module="$4" _option="$5" _valueRegex="$6" _defaultValue="$7" _position="$8"
+# 	local _remove_argument=""
+# 	if [ $# -eq 9 ] ; then
+# 		_remove_argument="$9"
+# 		# convert it to lowercase
+# 		_remove_argument=${_remove_argument,,}
+# 	fi
+
+# 	# make sure that we have a line like this in ${_pamFile} (additional options are left as-is):
+# 	# ${_type} ${_control} ${_module} ${_option}=${_valueRegex}
+
+# 	if ! [ -e "$_pamFile" ] ; then
+# 		echo "$_pamFile doesn't exist" >&2
+# 		exit 1
+# 	fi
+
+# 	# if remove argument only
+# 	if [ "${_remove_argument}" = "yes" -o "${_remove_argument}" = "true" ] ; then
+# 		sed --follow-symlinks -i -E -e "s/^(\\s*${_type}\\s+\\S+\\s+${_module}(\\s.+)?)\\s${_option}(=\\S+)?/\\1/" "${_pamFile}"
+# 		exit 0
+# 	fi
+
+# 	# non-empty values need to be preceded by an equals sign
+# 	[ -n "${_valueRegex}" ] && _valueRegex="=${_valueRegex}"
+# 	# add an equals sign to non-empty values
+# 	[ -n "${_defaultValue}" ] && _defaultValue="=${_defaultValue}"
+
+# 	# fix 'type' if it's wrong
+# 	if grep -q -P "^\\s*(?"'!'"${_type}\\s)[[:alnum:]]+\\s+[[:alnum:]]+\\s+${_module}" < "${_pamFile}" ; then
+# 		sed --follow-symlinks -i -E -e "s/^(\\s*)[[:alnum:]]+(\\s+[[:alnum:]]+\\s+${_module})/\\1${_type}\\2/" "${_pamFile}"
+# 	fi
+
+# 	# fix 'control' if it's wrong
+# 	if grep -q -P "^\\s*${_type}\\s+(?"'!'"${_control})[[:alnum:]]+\\s+${_module}" < "${_pamFile}" ; then
+# 		sed --follow-symlinks -i -E -e "s/^(\\s*${_type}\\s+)[[:alnum:]]+(\\s+${_module})/\\1${_control}\\2/" "${_pamFile}"
+# 	fi
+
+# 	# fix the value for 'option' if one exists but does not match '_valueRegex'
+#     if grep -q -P "^\\s*${_type}\\s+${_control}\\s+${_module}(\\s.+)?\\s+${_option}(?"'!'"${_valueRegex}(\\s|\$))" < "${_pamFile}" ; then
+# 		sed --follow-symlinks -i -E -e "s/^(\\s*${_type}\\s+${_control}\\s+${_module}(\\s.+)?\\s)${_option}=[^[:space:]]*/\\1${_option}${_defaultValue}/" "${_pamFile}"
+
+#     # add 'option=default' if option is not set
+# 	elif grep -q -E "^\\s*${_type}\\s+${_control}\\s+${_module}" < "${_pamFile}" &&
+#          grep    -E "^\\s*${_type}\\s+${_control}\\s+${_module}" < "${_pamFile}" | grep -q -E -v "\\s${_option}(=|\\s|\$)" ; then
+
+# 		sed --follow-symlinks -i -E -e "s/^(\\s*${_type}\\s+${_control}\\s+${_module}[^\\n]*)/\\1 ${_option}${_defaultValue}/" "${_pamFile}"
+# 	# add a new entry if none exists
+# 	elif ! grep -q -P "^\\s*${_type}\\s+${_control}\\s+${_module}(\\s.+)?\\s+${_option}${_valueRegex}(\\s|\$)" < "${_pamFile}" ; then
+# 		if [ "${_position}" = "top" ] ; then
+# 			sed --follow-symlinks -i "/\"Primary\"/i ${_type} ${_control} ${_module} ${_option}${_defaultValue}" "${_pamFile}"
+# 		else
+# 			echo "${_type} ${_control} ${_module} ${_option}${_defaultValue}" >> "${_pamFile}"
+#         fi
+# 	fi
+# }
+# ensure_pam_module_options '/etc/pam.d/common-password' 'password' 'requisite' 'pam_pwquality.so' 'retry' $var_password_pam_retry $var_password_pam_retry 'bottom'
+
+# else
+#     >&2 echo 'Remediation is not applicable, nothing was done'
+# fi
+# # END fix for 'accounts_password_pam_retry'
+
+# ###############################################################################
+# # BEGIN fix (31 / 277) for 'accounts_password_pam_ucredit'
+# ###############################################################################
+# (>&2 echo "Remediating rule 31/277: 'accounts_password_pam_ucredit'")
+# # Remediation is applicable only in certain platforms
+# if dpkg-query --show --showformat='${db:Status-Status}\n' 'libpam-runtime' 2>/dev/null | grep -q installed; then
+
+
+# var_password_pam_ucredit='-1'
+
+
+
+# # Test if the config_file is a symbolic link. If so, use --follow-symlinks with sed.
+# # Otherwise, regular sed command will do.
+# sed_command=('sed' '-i')
+# if test -L "/etc/security/pwquality.conf"; then
+#     sed_command+=('--follow-symlinks')
+# fi
+
+# # If the cce arg is empty, CCE is not assigned.
+# if [ -z "" ]; then
+#     cce="CCE"
+# else
+#     cce=""
+# fi
+
+# # Strip any search characters in the key arg so that the key can be replaced without
+# # adding any search characters to the config file.
+# stripped_key=$(sed 's/[\^=\$,;+]*//g' <<< "^ucredit")
+
+# # shellcheck disable=SC2059
+# printf -v formatted_output "%s = %s" "$stripped_key" "$var_password_pam_ucredit"
+
+# # If the key exists, change it. Otherwise, add it to the config_file.
+# # We search for the key string followed by a word boundary (matched by \>),
+# # so if we search for 'setting', 'setting2' won't match.
+# if LC_ALL=C grep -q -m 1 -i -e "^ucredit\\>" "/etc/security/pwquality.conf"; then
+#     "${sed_command[@]}" "s/^ucredit\\>.*/$formatted_output/gi" "/etc/security/pwquality.conf"
+# else
+#     # \n is precaution for case where file ends without trailing newline
+#     printf '\n# Per %s: Set %s in %s\n' "$cce" "$formatted_output" "/etc/security/pwquality.conf" >> "/etc/security/pwquality.conf"
+#     printf '%s\n' "$formatted_output" >> "/etc/security/pwquality.conf"
+# fi
+
+# else
+#     >&2 echo 'Remediation is not applicable, nothing was done'
+# fi
+# # END fix for 'accounts_password_pam_ucredit'
+
+# ###############################################################################
+# # BEGIN fix (32 / 277) for 'single_user_authentication'
+# ###############################################################################
+# (>&2 echo "Remediating rule 32/277: 'single_user_authentication'")
+
+# var_root_passwd_hash='*'
+
+
+
+# # Only applies the hash to /etc/shadow if the variable contains a value different from '*', '!'
+# # or empty
+# if [ -n "${var_root_passwd_hash/+([[:blank:]])/}" ] && [ "${var_root_passwd_hash}" != "*" ] &&\
+#     [ "${var_root_passwd_hash}" != "!" ]; then
+#     sed -Ei "s@^root:[^:]*@root:${var_root_passwd_hash}@" /etc/shadow
+# fi
+# # END fix for 'single_user_authentication'
+
+# ###############################################################################
+# # BEGIN fix (33 / 277) for 'account_disable_post_pw_expiration'
+# ###############################################################################
+# (>&2 echo "Remediating rule 33/277: 'account_disable_post_pw_expiration'")
+# # Remediation is applicable only in certain platforms
+# if dpkg-query --show --showformat='${db:Status-Status}\n' 'login' 2>/dev/null | grep -q installed; then
+
+
+# var_account_disable_post_pw_expiration='30'
+
+
+
+# # Test if the config_file is a symbolic link. If so, use --follow-symlinks with sed.
+# # Otherwise, regular sed command will do.
+# sed_command=('sed' '-i')
+# if test -L "/etc/default/useradd"; then
+#     sed_command+=('--follow-symlinks')
+# fi
+
+# # If the cce arg is empty, CCE is not assigned.
+# if [ -z "" ]; then
+#     cce="CCE"
+# else
+#     cce=""
+# fi
+
+# # Strip any search characters in the key arg so that the key can be replaced without
+# # adding any search characters to the config file.
+# stripped_key=$(sed 's/[\^=\$,;+]*//g' <<< "^INACTIVE")
+
+# # shellcheck disable=SC2059
+# printf -v formatted_output "%s=%s" "$stripped_key" "$var_account_disable_post_pw_expiration"
+
+# # If the key exists, change it. Otherwise, add it to the config_file.
+# # We search for the key string followed by a word boundary (matched by \>),
+# # so if we search for 'setting', 'setting2' won't match.
+# if LC_ALL=C grep -q -m 1 -i -e "^INACTIVE\\>" "/etc/default/useradd"; then
+#     "${sed_command[@]}" "s/^INACTIVE\\>.*/$formatted_output/gi" "/etc/default/useradd"
+# else
+#     # \n is precaution for case where file ends without trailing newline
+#     printf '\n# Per %s: Set %s in %s\n' "$cce" "$formatted_output" "/etc/default/useradd" >> "/etc/default/useradd"
+#     printf '%s\n' "$formatted_output" >> "/etc/default/useradd"
+# fi
+
+# else
+#     >&2 echo 'Remediation is not applicable, nothing was done'
+# fi
+# # END fix for 'account_disable_post_pw_expiration'
+
+# ###############################################################################
+# # BEGIN fix (34 / 277) for 'accounts_maximum_age_login_defs'
+# ###############################################################################
+# (>&2 echo "Remediating rule 34/277: 'accounts_maximum_age_login_defs'")
+# # Remediation is applicable only in certain platforms
+# if dpkg-query --show --showformat='${db:Status-Status}\n' 'login' 2>/dev/null | grep -q installed; then
+
+
+# var_accounts_maximum_age_login_defs='365'
+
+
+
+# grep -q ^PASS_MAX_DAYS /etc/login.defs && \
+#   sed -i "s/PASS_MAX_DAYS.*/PASS_MAX_DAYS     $var_accounts_maximum_age_login_defs/g" /etc/login.defs
+# if ! [ $? -eq 0 ]; then
+#     echo "PASS_MAX_DAYS      $var_accounts_maximum_age_login_defs" >> /etc/login.defs
+# fi
+
+# else
+#     >&2 echo 'Remediation is not applicable, nothing was done'
+# fi
+# # END fix for 'accounts_maximum_age_login_defs'
 
 ###############################################################################
 # BEGIN fix (35 / 277) for 'accounts_minimum_age_login_defs'
